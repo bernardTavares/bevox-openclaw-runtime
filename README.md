@@ -31,7 +31,7 @@ It's the runtime half of the Company OS. The code that ran on it is public too:
 config/openclaw.example.json   gateway config: agents, models, fallbacks, channels, hooks, plugins
 agents/<id>/                   persona and operating files per agent (SOUL, AGENTS, IDENTITY, TOOLS, HEARTBEAT, BOOT)
 cron/jobs.json                 OpenClaw cron jobs (agent turns on a schedule)
-systemd/                       23 services + 17 timers (gateways, dispatcher, reaper, health, cost, knowledge)
+systemd/                       19 services + 14 timers, plus drop-in overrides (gateways, dispatcher, reaper, health, cost, knowledge)
 modelfiles/                    the Ollama Modelfile for the local 64k-context model
 scripts/telegram-send.sh       small helper for sending to Telegram from shell jobs
 ```
