@@ -1,0 +1,11 @@
+[Unit]
+Description=E9 wave 2 cost alert check timer (hourly)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-15-e9-cost-usage-wave-2.md
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Unit=openclaw-cost-alert-check.service
+
+[Install]
+WantedBy=timers.target

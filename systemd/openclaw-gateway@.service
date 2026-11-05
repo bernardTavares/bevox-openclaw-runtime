@@ -1,0 +1,19 @@
+[Unit]
+Description=OpenClaw Gateway — profile %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=%h/.openclaw/gateway/bots/%i.env
+ExecStart=%h/.npm-global/bin/openclaw --profile %i gateway --port ${OPENCLAW_GATEWAY_PORT}
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+SuccessExitStatus=0 143
+KillMode=control-group
+Environment=HOME=%h
+Environment=PATH=/usr/bin:%h/.local/bin:%h/.npm-global/bin:%h/bin:%h/.volta/bin:%h/.asdf/shims:%h/.bun/bin:%h/.nvm/current/bin:%h/.fnm/current/bin:%h/.local/share/pnpm:/usr/local/bin:/bin
+
+[Install]
+WantedBy=default.target

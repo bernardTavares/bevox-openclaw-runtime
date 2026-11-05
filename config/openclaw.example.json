@@ -1,0 +1,283 @@
+{
+  "agents": {
+    "defaults": {
+      "workspace": "~/.openclaw/workspace",
+      "models": {
+        "openai-codex/gpt-5.4": {}
+      },
+      "model": {
+        "primary": "openai-codex/gpt-5.4",
+        "fallbacks": [
+          "openrouter/qwen/qwen3.6-plus",
+          "openrouter/deepseek/deepseek-v4-pro",
+          "openrouter/deepseek/deepseek-v4-flash"
+        ]
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "llm": {
+        "idleTimeoutSeconds": 600
+      },
+      "contextInjection": "continuation-skip",
+      "bootstrapMaxChars": 8000,
+      "bootstrapTotalMaxChars": 30000,
+      "heartbeat": {
+        "every": "30m",
+        "lightContext": true,
+        "isolatedSession": true,
+        "activeHours": {
+          "start": "07:00",
+          "end": "23:00",
+          "timezone": "America/Sao_Paulo"
+        },
+        "includeSystemPromptSection": false,
+        "ackMaxChars": 256
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "model": "openai-codex/gpt-5.4",
+        "workspace": "~/.openclaw/workspace"
+      },
+      {
+        "id": "healthcheck-light",
+        "model": "ollama/qwen3:14b",
+        "workspace": "~/.openclaw/workspace-healthcheck-light"
+      },
+      {
+        "id": "heartbeat-light",
+        "model": "ollama/qwen3:4b",
+        "workspace": "~/.openclaw/workspace-watchdog-light"
+      },
+      {
+        "id": "watchdog-light",
+        "model": "ollama/qwen3:4b",
+        "workspace": "~/.openclaw/workspace-watchdog-light"
+      },
+      {
+        "id": "weekly-review-agent",
+        "model": "ollama/qwen3:14b",
+        "workspace": "~/.openclaw/workspace-weekly-review-agent"
+      },
+      {
+        "id": "triage-agent",
+        "model": "ollama/qwen3:4b",
+        "workspace": "~/.openclaw/workspace-triage-agent"
+      },
+      {
+        "id": "vox-local",
+        "model": "ollama/qwen3:14b",
+        "workspace": "~/.openclaw/workspace-vox-local"
+      },
+      {
+        "id": "bevox-mobile",
+        "name": "Bevox-mobile",
+        "workspace": "~/.openclaw/workspace-bevox-mobile",
+        "agentDir": "~/.openclaw/agents/bevox-mobile/agent"
+      }
+    ]
+  },
+  "gateway": {
+    "mode": "local",
+    "auth": {
+      "mode": "token",
+      "token": "${OPENCLAW_GATEWAY_TOKEN}"
+    },
+    "port": 18789,
+    "bind": "loopback",
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "controlUi": {
+      "allowInsecureAuth": false
+    }
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "tools": {
+    "profile": "coding",
+    "elevated": {
+      "enabled": true,
+      "allowFrom": {
+        "telegram": [
+          "<your-telegram-user-id>"
+        ]
+      }
+    },
+    "media": {
+      "audio": {
+        "enabled": true,
+        "maxBytes": 20971520,
+        "models": [
+          {
+            "type": "cli",
+            "command": "~/whisper.cpp/build/bin/whisper-cli",
+            "args": [
+              "-m",
+              "~/whisper.cpp/models/ggml-base.bin",
+              "-l",
+              "pt",
+              "-f",
+              "{{MediaPath}}"
+            ],
+            "timeoutSeconds": 60
+          }
+        ]
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "openai-codex:you@example.com": {
+        "provider": "openai-codex",
+        "mode": "oauth",
+        "email": "you@example.com"
+      },
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "api_key"
+      }
+    }
+  },
+  "channels": {
+    "telegram": {
+      "enabled": true,
+      "groups": {
+        "*": {
+          "requireMention": true
+        }
+      },
+      "dmPolicy": "allowlist",
+      "allowFrom": [
+        "<your-telegram-user-id>"
+      ]
+    }
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": {
+          "enabled": true
+        },
+        "bootstrap-extra-files": {
+          "enabled": true
+        },
+        "command-logger": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "plugins": {
+    "allow": [
+      "knowledge-sync-commands",
+      "clarification-commands",
+      "openai",
+      "openrouter",
+      "qwen",
+      "deepseek",
+      "google",
+      "arcee",
+      "ollama"
+    ],
+    "entries": {
+      "anthropic": {
+        "enabled": false
+      },
+      "openai": {
+        "enabled": true
+      },
+      "openrouter": {
+        "enabled": true
+      },
+      "qwen": {
+        "enabled": true
+      },
+      "deepseek": {
+        "enabled": true
+      },
+      "google": {
+        "enabled": true
+      },
+      "arcee": {
+        "enabled": true
+      },
+      "knowledge-sync-commands": {
+        "enabled": true
+      },
+      "clarification-commands": {
+        "enabled": true
+      },
+      "ollama": {
+        "enabled": true
+      }
+    },
+    "installs": {
+      "knowledge-sync-commands": {
+        "source": "path",
+        "sourcePath": "~/code/knowledge-sync/plugins/knowledge-sync-commands",
+        "installPath": "~/.openclaw/extensions/knowledge-sync-commands",
+        "version": "0.1.0"
+      },
+      "clarification-commands": {
+        "source": "path",
+        "sourcePath": "~/code/knowledge-sync/plugins/clarification-commands",
+        "installPath": "~/.openclaw/extensions/clarification-commands",
+        "version": "0.1.0"
+      }
+    }
+  },
+  "models": {
+    "providers": {
+      "ollama": {
+        "models": [
+          {
+            "contextWindow": 32768,
+            "maxTokens": 2048,
+            "name": "qwen3:4b",
+            "id": "qwen3:4b"
+          },
+          {
+            "contextWindow": 32768,
+            "maxTokens": 4096,
+            "name": "qwen3:14b",
+            "id": "qwen3:14b"
+          },
+          {
+            "contextWindow": 65536,
+            "maxTokens": 4096,
+            "name": "qwen3:14b-64k",
+            "id": "qwen3:14b-64k"
+          },
+          {
+            "contextWindow": 32768,
+            "maxTokens": 4096,
+            "name": "deepseek-r1:14b",
+            "id": "deepseek-r1:14b"
+          },
+          {
+            "contextWindow": 32768,
+            "maxTokens": 4096,
+            "name": "qwen2.5-coder:14b",
+            "id": "qwen2.5-coder:14b"
+          },
+          {
+            "contextWindow": 16384,
+            "maxTokens": 2048,
+            "name": "qwen2.5-coder:7b",
+            "id": "qwen2.5-coder:7b"
+          }
+        ],
+        "baseUrl": "http://127.0.0.1:11434"
+      }
+    }
+  }
+}

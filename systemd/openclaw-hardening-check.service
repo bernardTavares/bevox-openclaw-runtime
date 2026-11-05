@@ -1,0 +1,10 @@
+[Unit]
+Description=OpenClaw hardening tracker (E8/F5) — single scan
+Documentation=file:%h/bevox-knowledge/35_specs/2026-04-18-e8-f5-hardening-tracker-wave-1.md
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.openclaw/health/health-venv/bin/python %h/.openclaw/hardening/runner.py --scan
+StandardOutput=journal
+StandardError=journal

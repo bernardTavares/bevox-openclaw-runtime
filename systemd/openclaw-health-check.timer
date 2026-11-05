@@ -1,0 +1,11 @@
+[Unit]
+Description=E8 wave 1 health check timer (2min cadence)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-14-e8-infra-health-backup-wave-1.md
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=2min
+Unit=openclaw-health-check.service
+
+[Install]
+WantedBy=timers.target

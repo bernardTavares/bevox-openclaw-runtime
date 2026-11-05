@@ -1,0 +1,13 @@
+[Unit]
+Description=OpenClaw hardening tracker (E8/F5) — hourly cadence
+Documentation=file:%h/bevox-knowledge/35_specs/2026-04-18-e8-f5-hardening-tracker-wave-1.md
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1h
+AccuracySec=5min
+Persistent=true
+Unit=openclaw-hardening-check.service
+
+[Install]
+WantedBy=timers.target

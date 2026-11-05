@@ -1,0 +1,11 @@
+[Unit]
+Description=E8 wave 2 operational backup (oneshot)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-16-e8-backup-center-wave-2.md
+
+[Service]
+Type=oneshot
+ExecStart=%h/.openclaw/health/health-venv/bin/python3 %h/.openclaw/backups/backup-runner.py --run
+WorkingDirectory=%h/.openclaw/backups
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal

@@ -1,0 +1,11 @@
+[Unit]
+Description=E11 wave 1 finance snapshot timer (hourly)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-14-e11-finance-runway-wave-1.md
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Unit=openclaw-finance-snapshot.service
+
+[Install]
+WantedBy=timers.target

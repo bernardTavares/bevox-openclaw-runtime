@@ -1,0 +1,14 @@
+[Unit]
+Description=E9 wave 1 cost & usage collector (oneshot)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-14-e9-cost-usage-wave-1.md
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/env npx tsx %h/code/mission-control/scripts/collect-usage.ts
+WorkingDirectory=%h/code/mission-control
+Environment=USAGE_DB_PATH=%h/.openclaw/cost/usage-tracking.db
+Environment=NODE_ENV=production
+Environment=PATH=%h/.npm-global/bin:%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+StandardOutput=journal
+StandardError=journal

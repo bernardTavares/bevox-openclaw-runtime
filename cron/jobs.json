@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "900940c2-8350-456e-9d2e-e862267a1a21",
+      "agentId": "heartbeat-light",
+      "sessionKey": "agent:healthcheck-light:telegram:direct:<your-telegram-user-id>",
+      "name": "healthcheck:operational-check",
+      "enabled": true,
+      "schedule": {
+        "kind": "every",
+        "everyMs": 14400000
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Faça uma checagem operacional ultra-leve e silenciosa. Verifique só: 1) se há algo crítico nas próximas 24-48h, 2) se existe pendência realmente urgente em memory/pending.md, 3) se os crons principais parecem vivos. Leia apenas o mínimo necessário. Se não houver nada importante, responda exatamente NO_REPLY. Se houver algo importante, responda em formato curto, objetivo e acionável para Bernard. Respeite silêncio entre 23h e 8h, salvo urgência real.",
+        "timeoutSeconds": 45,
+        "lightContext": true,
+        "model": "ollama/qwen3:4b"
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "<your-telegram-user-id>",
+        "channel": "telegram"
+      }
+    },
+    {
+      "id": "b2f711f3-1173-44dc-be90-eaac9268cb4e",
+      "agentId": "watchdog-light",
+      "sessionKey": "agent:watchdog-light:telegram:direct:<your-telegram-user-id>",
+      "name": "watchdog:cron-health",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Faça um watchdog simples dos crons ativos. Verifique os crons existentes e identifique falhas ou ausência de runs recentes anormais. Se encontrar falha possivelmente transitória, tente no máximo 1 retry seguro. Se houver falha repetida, risco ou comportamento anormal, avise Bernard com um resumo curto, claro e acionável. Se estiver tudo saudável, responda com NO_REPLY.",
+        "timeoutSeconds": 180,
+        "lightContext": true,
+        "model": "ollama/qwen3:4b"
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "<your-telegram-user-id>",
+        "channel": "telegram"
+      }
+    },
+    {
+      "id": "68885b74-eedf-4baa-8e94-6284f317283b",
+      "agentId": "weekly-review-agent",
+      "sessionKey": "agent:weekly-review-agent:telegram:direct:<your-telegram-user-id>",
+      "name": "review:weekly-system-performance",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 18 * * 0",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "session:agent:main:telegram:direct:<your-telegram-user-id>",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Faça uma revisão semanal leve da performance do sistema e dos agentes. Verifique: saúde dos crons, falhas recorrentes, qualidade da consolidação de memória, sinais de sobrecarga do hub, necessidade de abrir ou não um novo agente, e aderência à governança de modelos/custos. Se estiver tudo saudável e sem decisão necessária, responda com NO_REPLY. Se houver recomendação relevante, envie um resumo curto, executivo e acionável para Bernard.",
+        "timeoutSeconds": 180,
+        "lightContext": true
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "<your-telegram-user-id>",
+        "channel": "telegram"
+      }
+    },
+    {
+      "id": "727c4510-2ffb-491c-b186-3591e60af705",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:<your-telegram-user-id>",
+      "name": "watchdog:memory-script-execution",
+      "enabled": true,
+      "schedule": {
+        "kind": "cron",
+        "expr": "30 20 * * *",
+        "tz": "America/Sao_Paulo"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Verifique se o script de consolidação de memória executou hoje. Verifique: 1) timestamp do arquivo decisions.md (deve ter sido atualizado hoje), 2) se há erros nos logs do sistema. Se o script não executou ou falhou, avise Bernard. Timeout: 60s.",
+        "timeoutSeconds": 60,
+        "lightContext": true,
+        "model": "ollama/qwen3:4b"
+      },
+      "delivery": {
+        "mode": "announce",
+        "to": "<your-telegram-user-id>",
+        "channel": "telegram"
+      }
+    },
+    {
+      "id": "25efa3cd-d11b-40ee-8cce-1baf7b037f14",
+      "agentId": "main",
+      "sessionKey": "agent:main:telegram:direct:<your-telegram-user-id>",
+      "name": "cron-dispatcher:30s-poll",
+      "enabled": false,
+      "schedule": {
+        "kind": "every",
+        "everyMs": 30000
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Execute o script de auto-dispatch: ~/.openclaw/scripts/cron-dispatcher.sh. Se houver output relevante (tasks lançadas), registre em log. Se não houver tasks ready, responda NO_REPLY. Responda em no máximo 30 segundos.",
+        "timeoutSeconds": 30,
+        "lightContext": true,
+        "model": "ollama/qwen3:4b"
+      },
+      "delivery": {
+        "mode": "none"
+      }
+    }
+  ]
+}

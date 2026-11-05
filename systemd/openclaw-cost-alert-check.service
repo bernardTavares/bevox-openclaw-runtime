@@ -1,0 +1,13 @@
+[Unit]
+Description=E9 wave 2 cost alert checker (oneshot)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-15-e9-cost-usage-wave-2.md
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.openclaw/health/health-venv/bin/python3 %h/.openclaw/cost/alert-runner.py --build
+WorkingDirectory=%h/.openclaw/cost
+Environment=USAGE_DB_PATH=%h/.openclaw/cost/usage-tracking.db
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal

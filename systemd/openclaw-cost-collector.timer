@@ -1,0 +1,11 @@
+[Unit]
+Description=E9 wave 1 cost collector timer (hourly)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-14-e9-cost-usage-wave-1.md
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+Unit=openclaw-cost-collector.service
+
+[Install]
+WantedBy=timers.target

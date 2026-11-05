@@ -1,0 +1,13 @@
+[Unit]
+Description=E8 wave 3 health alert notifier (oneshot)
+Documentation=file://%h/bevox-knowledge/35_specs/2026-04-16-e8-health-alerts-wave-3.md
+After=openclaw-health-check.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.openclaw/health/health-venv/bin/python3 %h/.openclaw/health/alert-notifier.py --check
+WorkingDirectory=%h/.openclaw/health
+EnvironmentFile=%h/.openclaw/.env  # TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID live here
+Environment=PYTHONUNBUFFERED=1
+StandardOutput=journal
+StandardError=journal

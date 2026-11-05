@@ -1,0 +1,10 @@
+[Unit]
+Description=E8 wave 3 health alert timer (2min)
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+Unit=openclaw-health-alert.service
+
+[Install]
+WantedBy=timers.target
